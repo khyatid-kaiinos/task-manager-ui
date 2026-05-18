@@ -1,0 +1,36 @@
+name: Node.js CI with NPM
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Using the stable Node 22 version for 2026
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+      # Pro Tip: 'npm ci' is like 'npm install' but optimized for clean automated environments. 
+      # It strictly follows your package-lock.json.
+
+    - name: Run Unit Tests
+      run: npm test -- --watchAll=false
+      # This runs your Jest/React Testing Library tests once and closes (no interactive mode).
+
+    - name: Build Production Bundle
+      run: npm run build
+      # This compiles your React code into static HTML/CSS/JS (your final product).
