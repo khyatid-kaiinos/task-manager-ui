@@ -8,6 +8,10 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build:
@@ -34,3 +38,18 @@ jobs:
     - name: Build Production Bundle
       run: npm run build
       # This compiles your React code into static HTML/CSS/JS (your final product).
+      
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Push Frontend Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        # Hardcode your frontend package target here
+        tags: ghcr.io/khyatid-kaiinos/task-manager-ui:latest
