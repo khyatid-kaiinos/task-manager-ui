@@ -6,7 +6,8 @@ function App() {
 
   // 1. The "Effect" Hook: This runs as soon as the page loads
   useEffect(() => {
-    fetch('http://localhost:8080/api/tasks') // Calling your Spring Boot API
+    // fetch('http://localhost:8080/api/tasks') // Calling your Spring Boot API
+    fetch('http://192.168.49.2:30080/api/tasks') // Calling your Spring Boot API
       .then(response => response.json())
       .then(data => {
         setTasks(data);
